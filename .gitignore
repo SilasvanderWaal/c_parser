@@ -55,3 +55,5 @@ tlexer
 top
 tsym
 ttok
+tkeytoktab
+parser
