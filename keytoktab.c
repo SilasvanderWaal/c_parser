@@ -72,16 +72,18 @@ static tab keywordtab[] = {
 /* Display the tables                                                 */
 /**********************************************************************/
 void p_toktab() {
-    int toktab_length = sizeof(keywordtab) / sizeof(tab);
-    printf("--------------------\nToken Table\n--------------------\n");
-    for (int i = 0; i < toktab_length; i++) {
-        printf("Lexum:%s \t Token: %d \n", keywordtab[i].text,
-               keywordtab[i].token);
+    int keywrd_length = sizeof(keywordtab) / sizeof(tab);
+    int toktab_length = sizeof(tokentab) / sizeof(tab);
+
+    printf(
+        "--------------------\nThe Program Keywords\n--------------------\n");
+    for (int i = 0; i < keywrd_length; i++) {
+        printf("%10s %5d \n", keywordtab[i].text, keywordtab[i].token);
     }
-    printf("\n--------------------\nKeyword Table\n--------------------\n");
+    printf(
+        "\n--------------------\nThe Program Tokens\n--------------------\n");
     for (int i = 0; i < toktab_length; i++) {
-        printf("Lexum:%s \t Keyword: %d \n", keywordtab[i].text,
-               keywordtab[i].token);
+        printf("%10s %5d \n", tokentab[i].text, tokentab[i].token);
     }
 }
 
