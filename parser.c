@@ -14,13 +14,13 @@
 /**********************************************************************/
 #include "keytoktab.h"         /* when the keytoktab is added   */
 #include "lexer.h"             /* when the lexer     is added   */
-/* #include "symtab.h"      */ /* when the symtab    is added   */
+#include "symtab.h"            /* when the symtab    is added   */
 /* #include "optab.h"       */ /* when the optab     is added   */
 
 /**********************************************************************/
 /* OBJECT ATTRIBUTES FOR THIS OBJECT (C MODULE)                       */
 /**********************************************************************/
-#define DEBUG 1
+#define DEBUG 0
 static int lookahead   = 0;
 static int is_parse_ok = 1;
 
@@ -75,11 +75,13 @@ static void prog() {
     prog_header();
     var_part();
     stat_part();
+    p_symtab();
     out("prog");
 }
 static void prog_header() {
     in("program_header");
     match(program);
+    addp_name(get_lexeme());
     match(id);
     match('(');
     match(input);
@@ -112,6 +114,7 @@ static void var_dec() {
 }
 static void id_list() {
     in("id_list");
+    addv_name(get_lexeme());
     match(id);
     if (lookahead == ',') {
         match(',');
@@ -121,13 +124,18 @@ static void id_list() {
 }
 static void type() {
     in("type");
+    toktyp type;
     if (lookahead == integer) {
         match(integer);
+        type = integer;
     } else if (lookahead == real) {
         match(real);
+        type = real;
     } else if (lookahead == boolean) {
         match(boolean);
+        type = boolean;
     }
+    setv_type(type);
     out("type");
 }
 static void stat_part() {
