@@ -19,6 +19,8 @@
 /**********************************************************************/
 #define BUFSIZE 1024
 #define LEXSIZE 30
+#define WIDTH   56
+
 static char buffer[BUFSIZE];
 static char lexbuf[LEXSIZE];
 static int  pbuf = 0; /* current index program buffer  */
@@ -33,7 +35,15 @@ static int  plex = 0; /* current index lexeme  buffer  */
 /**********************************************************************/
 /* Read the input file into the buffer                                */
 /**********************************************************************/
-
+/**********************************************************************/
+/* Print a _ line                                                     */
+/**********************************************************************/
+static void p_line() {
+    for (int i = 0; i < WIDTH; i++) {
+        printf("_");
+    }
+    printf("\n");
+}
 static void get_prog() {
     char char_buff;
     while ((char_buff = fgetc(stdin)) != EOF) {

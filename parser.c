@@ -21,6 +21,8 @@
 /* OBJECT ATTRIBUTES FOR THIS OBJECT (C MODULE)                       */
 /**********************************************************************/
 #define DEBUG 0
+#define WIDTH 56
+
 static int lookahead   = 0;
 static int is_parse_ok = 1;
 
@@ -58,6 +60,15 @@ static void p_leftovers() {
     while (lookahead != '$') {
         printf("%s ", get_lexeme());
         match(lookahead);
+    }
+    printf("\n");
+}
+/**********************************************************************/
+/* Print a _ line                                                     */
+/**********************************************************************/
+static void p_line() {
+    for (int i = 0; i < WIDTH; i++) {
+        printf("_");
     }
     printf("\n");
 }
@@ -248,7 +259,7 @@ static toktyp operand() {
         type = get_ntype(get_lexeme());
         match(id);
     } else if (lookahead == number) {
-        type = integer; // Not taking real into account
+        type = integer;
         match(number);
     } else {
         type        = error;
@@ -261,7 +272,6 @@ static toktyp operand() {
 /**********************************************************************/
 /*  PUBLIC METHODS for this OBJECT  (EXPORTED)                        */
 /**********************************************************************/
-
 int parser() {
     in("parser");
     lookahead = get_token(); // get the first token

@@ -18,7 +18,6 @@
 int main() {
     parser() ? printf(" \n Parse Successful! \n")
              : printf(" \n Parse Failed! \n");
-    p_line();
     return 1;
 }
 

@@ -24,6 +24,7 @@
 #define INTSIZE     4
 #define REALSIZE    8
 #define BOOLSIZE    4
+#define WIDTH       56
 
 typedef char tname[NAMELEN];
 
@@ -39,6 +40,15 @@ static int startp  = 0; /* start position program in ST*/
 /**********************************************************************/
 /*  PRIVATE METHODS for this OBJECT  (using "static" in C)            */
 /**********************************************************************/
+/**********************************************************************/
+/* Print a _ line                                                     */
+/**********************************************************************/
+static void p_line() {
+    for (int i = 0; i < WIDTH; i++) {
+        printf("_");
+    }
+    printf("\n");
+}
 /**********************************************************************/
 /*  GET methods (one for each attribute)                              */
 /**********************************************************************/
@@ -178,7 +188,6 @@ void setv_type(toktyp ftype) {
 /*  Get the type of a variable from the symbol table                  */
 /**********************************************************************/
 toktyp get_ntype(char *fpname) { return get_type(get_ref(fpname)); }
-
 /**********************************************************************/
 /* End of code                                                        */
 /**********************************************************************/

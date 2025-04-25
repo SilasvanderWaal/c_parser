@@ -18,6 +18,7 @@
 /* OBJECT ATTRIBUTES FOR THIS OBJECT (C MODULE)                       */
 /**********************************************************************/
 #define NENTS 4
+#define WIDTH 56
 
 static int optab[][NENTS] = {
     {'+', integer, integer, integer},
@@ -34,7 +35,12 @@ static int optab[][NENTS] = {
 /**********************************************************************/
 /*  PRIVATE METHODS for this OBJECT  (using "static" in C)            */
 /**********************************************************************/
-
+static void p_line() {
+    for (int i = 0; i < WIDTH; i++) {
+        printf("_");
+    }
+    printf("\n");
+}
 /**********************************************************************/
 /*  PUBLIC METHODS for this OBJECT  (EXPORTED)                        */
 /**********************************************************************/
@@ -42,16 +48,16 @@ static int optab[][NENTS] = {
 /* display the op tab                                                 */
 /**********************************************************************/
 void p_optab() {
-    printf("\n________________________________________________________ \n");
+    p_line();
     printf(" THE OPERATOR TABLE\n");
-    printf("________________________________________________________ \n");
+    p_line();
     printf("%10s %10s %10s %10s \n", "operator", "arg1", "arg2", "result");
-    printf("________________________________________________________ \n");
+    p_line();
     for (int i = 0; optab[i][0] != '$'; i++) {
         printf("%10c, %10s, %10s, %10s \n", optab[i][0], tok2lex(optab[i][1]),
                tok2lex(optab[i][2]), tok2lex(optab[i][3]));
     }
-    printf("________________________________________________________ \n");
+    p_line();
 }
 
 /**********************************************************************/
