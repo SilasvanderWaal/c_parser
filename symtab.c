@@ -20,12 +20,10 @@
 /**********************************************************************/
 #define TABSIZE     1024 /* symbol table size           */
 #define NAMELEN     20   /* name length                 */
-#define PROGRAMSIZE 32
 #define PROGRAMADDR 0
 #define INTSIZE     4
 #define REALSIZE    8
 #define BOOLSIZE    4
-#define WIDTH       50
 
 typedef char tname[NAMELEN];
 
@@ -92,17 +90,6 @@ static int get_ref(char *fpname) {
     }
     return nfound;
 }
-
-/**********************************************************************/
-/*  Print out a - line in order to separate parts in the UI           */
-/**********************************************************************/
-static void p_line() {
-    for (int i = 0; i < WIDTH; i++) {
-        printf("-");
-    }
-    printf("\n");
-}
-
 /**********************************************************************/
 /*  return the size of a type, if no size can be mapped return 0      */
 /**********************************************************************/
@@ -125,23 +112,24 @@ static int map_size(toktyp type) {
 /*  Display the symbol table                                          */
 /**********************************************************************/
 static void p_symrow(int ftref) {
-    printf("%s\t", get_name(ftref));
-    printf("%6s\t", tok2lex(get_role(ftref)));
-    printf("%6s\t", tok2lex(get_type(ftref)));
-    printf("%6d\t", get_size(ftref));
-    printf("%6d\n", get_addr(ftref));
+    printf("%11s", get_name(ftref));
+    printf("%11s", tok2lex(get_role(ftref)));
+    printf("%11s", tok2lex(get_type(ftref)));
+    printf("%10d", get_size(ftref));
+    printf("%10d \n", get_addr(ftref));
 }
 
 void p_symtab() {
     p_line();
-    printf(" | SYMBOL TABLE |\n");
+    printf(" THE SYMBOL TABLE \n");
     p_line();
-    printf("%6s\t %6s\t %6s\t %6s\t %6s\n", "NAME", "ROLE", "TYPE", "SIZE",
-           "ADDR");
+    printf("%11s%11s%11s%10s%10s \n", "NAME", "ROLE", "TYPE", "SIZE", "ADDR");
     p_line();
     for (int i = 0; i < numrows; i++) {
         p_symrow(i);
     }
+    p_line();
+    printf(" STATIC STORAGE REQUIRED is %d BYTES\n", get_size(startp));
     p_line();
 }
 
@@ -150,20 +138,13 @@ void p_symtab() {
 /**********************************************************************/
 void addp_name(char *fpname) {
     if (get_ref(fpname) == nfound)
-        addrow(fpname, program, program, PROGRAMSIZE, PROGRAMADDR);
-    else
-        perror("Program name already exists!");
+        addrow(fpname, program, program, startp, PROGRAMADDR);
 }
 
 /**********************************************************************/
 /*  Add a variable name to the symbol table                           */
 /**********************************************************************/
-void addv_name(char *fpname) {
-    if (get_ref(fpname) == nfound)
-        addrow(fpname, var, undef, 0, 0);
-    else
-        perror("Variable name already exists!");
-}
+void addv_name(char *fpname) { addrow(fpname, var, undef, 0, 0); }
 
 /**********************************************************************/
 /*  Find a name in the the symbol table                               */
@@ -181,14 +162,16 @@ int find_name(char *fpname) {
 /*  Set the type of an id list in the symbol table                    */
 /**********************************************************************/
 void setv_type(toktyp ftype) {
-    for (int i = 0; i < numrows; i++) {
+    for (int i = startp + 1; i < numrows; i++) {
         if (get_type(i) == undef) {
             set_type(i, ftype);
             set_size(i, map_size(ftype));
-            set_addr(i, startp);
-            startp += map_size(ftype);
+            set_addr(i,
+                     get_addr(i - 1) + (get_size(i - 1) * (i > (startp + 1))));
         }
     }
+    int last_index = numrows - 1;
+    set_size(startp, get_addr(last_index) + get_size(last_index));
 }
 
 /**********************************************************************/

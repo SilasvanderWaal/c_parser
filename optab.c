@@ -5,8 +5,8 @@
 /**********************************************************************/
 /* Include files                                                      */
 /**********************************************************************/
-#include <stdio.h>
 #include <ctype.h>
+#include <stdio.h>
 #include <string.h>
 
 /**********************************************************************/
@@ -20,16 +20,16 @@
 #define NENTS 4
 
 static int optab[][NENTS] = {
-   {'+', integer, integer, integer},
-   {'+', real,    real,    real},
-   {'+', integer, real,    real},
-   {'+', real,    integer, real},
-   {'*', integer, integer, integer},
-   {'*', real,    real,    real},
-   {'*', integer, real,    real},
-   {'*', real,    integer, real},
-   {'$', undef,   undef,   undef}
-   };
+    {'+', integer, integer, integer},
+    {'+',    real,    real,    real},
+    {'+', integer,    real,    real},
+    {'+',    real, integer,    real},
+    {'*', integer, integer, integer},
+    {'*',    real,    real,    real},
+    {'*', integer,    real,    real},
+    {'*',    real, integer,    real},
+    {'$',   undef,   undef,   undef}
+};
 
 /**********************************************************************/
 /*  PRIVATE METHODS for this OBJECT  (using "static" in C)            */
@@ -41,17 +41,29 @@ static int optab[][NENTS] = {
 /**********************************************************************/
 /* display the op tab                                                 */
 /**********************************************************************/
-void p_optab()
-{
-    printf("\n *** TO BE DONE");
+void p_optab() {
+    printf("\n________________________________________________________ \n");
+    printf(" THE OPERATOR TABLE\n");
+    printf("________________________________________________________ \n");
+    printf("%10s %10s %10s %10s \n", "operator", "arg1", "arg2", "result");
+    printf("________________________________________________________ \n");
+    for (int i = 0; optab[i][0] != '$'; i++) {
+        printf("%10c, %10s, %10s, %10s \n", optab[i][0], tok2lex(optab[i][1]),
+               tok2lex(optab[i][2]), tok2lex(optab[i][3]));
+    }
+    printf("________________________________________________________ \n");
 }
 
 /**********************************************************************/
 /* return the type of a binary expression op arg1 arg2                */
 /**********************************************************************/
-int get_otype(int op, int arg1, int arg2)
-{
-    printf("\n *** TO BE DONE"); return 0;
+int get_otype(int op, int arg1, int arg2) {
+    for (int i = 0; (optab[i][0] != '$'); i++) {
+        if (optab[i][0] == op && optab[i][1] == arg1 && optab[i][2] == arg2) {
+            return optab[i][3];
+        }
+    }
+    return undef;
 }
 
 /**********************************************************************/

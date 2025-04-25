@@ -19,7 +19,6 @@
 /**********************************************************************/
 #define BUFSIZE 1024
 #define LEXSIZE 30
-#define WIDTH   30
 static char buffer[BUFSIZE];
 static char lexbuf[LEXSIZE];
 static int  pbuf = 0; /* current index program buffer  */
@@ -34,12 +33,6 @@ static int  plex = 0; /* current index lexeme  buffer  */
 /**********************************************************************/
 /* Read the input file into the buffer                                */
 /**********************************************************************/
-static void p_line() {
-    for (int i = 0; i < WIDTH; i++) {
-        printf("-");
-    }
-    printf("\n");
-}
 
 static void get_prog() {
     char char_buff;
@@ -51,13 +44,12 @@ static void get_prog() {
     }
     buffer[pbuf] = '$';
 }
-
 /**********************************************************************/
 /* Display the buffer                                                 */
 /**********************************************************************/
-
 static void pbuffer() {
-    printf("\n |CURRENT BUFFER|\n");
+    p_line();
+    printf(" THE PROGRAM TEXT\n");
     p_line();
     printf("%s\n", buffer);
     p_line();
@@ -84,15 +76,16 @@ int get_token() {
     plex                  = 0;
     memset(lexbuf, 0, LEXSIZE);
 
-    while (isspace(buffer[pbuf]))
-        pbuf++;
-
     if (start_flag == 1) {
         get_prog();
         pbuffer();
         start_flag = 0;
         pbuf       = 0;
     }
+
+    while (isspace(buffer[pbuf]))
+        pbuf++;
+
     if (isdigit(buffer[pbuf])) {
         while (isdigit(buffer[pbuf])) {
             get_char();
@@ -113,8 +106,7 @@ int get_token() {
         }
         return lex2tok(lexbuf);
     }
-    printf("Can not map lexem %s to a token", lexbuf);
-    return -1;
+    return error;
 }
 
 /**********************************************************************/

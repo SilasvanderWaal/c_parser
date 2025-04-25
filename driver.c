@@ -10,15 +10,15 @@
 /**********************************************************************/
 /* Other OBJECT's METHODS (IMPORTED)                                  */
 /**********************************************************************/
+#include "keytoktab.h"
 #include "parser.h"
-
 /**********************************************************************/
 /* The main function (the driver)                                     */
 /**********************************************************************/
-int main()
-{
-    parser()    ? printf(" \n Parse Successful! \n")
-                : printf(" \n Parse Failed! \n");
+int main() {
+    parser() ? printf(" \n Parse Successful! \n")
+             : printf(" \n Parse Failed! \n");
+    p_line();
     return 1;
 }
 
